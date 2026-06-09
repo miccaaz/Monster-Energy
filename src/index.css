@@ -15,3 +15,21 @@
   --color-pink: #73196A;
   --color-neon: #00FF1E;
 }
+
+@layer base {
+  body {
+    @apply bg-black text-black font-body text-lg overflow-x-clip;
+  }
+  h2 {
+    @apply font-semibold text-7xl;
+  }
+}
+
+@layer components {
+  .inner-container {
+    @apply px-28;
+  }
+  img {
+    width: 100%;
+  }
+}
