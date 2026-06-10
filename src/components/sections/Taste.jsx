@@ -2,7 +2,7 @@ import React from 'react'
 
 const Taste = () => {
   return (
-    <div>Taste</div>
+    <div className='min-h-screen min-w-screen bg-amber-600'>Taste</div>
   )
 }
 

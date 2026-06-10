@@ -2,7 +2,7 @@ import React from 'react'
 
 const Quality = () => {
   return (
-    <div>Quality</div>
+    <div className='min-h-screen min-w-screen bg-amber-500'>Quality</div>
   )
 }
 

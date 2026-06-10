@@ -9,7 +9,6 @@ import Footer from './components/layout/Footer'
 
 const App = () => {
   return (
-
     <SmoothScroll>
       <Header />
       <Hero />
@@ -18,7 +17,6 @@ const App = () => {
       <Parallax />
       <Footer />
     </SmoothScroll>
-    
   )
 }
 

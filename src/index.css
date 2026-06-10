@@ -1,12 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Protest+Strike&display=swap');
 @import 'tailwindcss';
-
-@layer {
-  @import url('https://fonts.googleapis.com/css2?family=Protest+Strike&display=swap');
-}
 
 @theme {
   --font-body: "Protest Strike", sans-serif;
-  --color-black: #1E1E1E;
+  --color-black-grey: #1E1E1E;
   --color-grey: #161616;
   --color-white: #FFFFFF;
   --color-red: #D52124;
@@ -18,8 +15,9 @@
 
 @layer base {
   body {
-    @apply bg-black text-black font-body text-lg overflow-x-clip;
+    @apply bg-red text-white font-body text-lg overflow-x-clip;
   }
+
   h2 {
     @apply font-semibold text-7xl;
   }
@@ -29,7 +27,18 @@
   .inner-container {
     @apply px-28;
   }
+
   img {
     width: 100%;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-50%);
   }
 }
