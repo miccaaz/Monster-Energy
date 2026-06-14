@@ -1,63 +1,57 @@
-import React, { useState, useRef } from 'react'
-import Monster from '../../assets/monster.png'
-import Apple from '../../assets/images/logos/bad-apple-logo.png'
+import React, { useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Monster from '../../assets/monster.png'
 import { flavors, getFlavorByIndex } from '../../data/flavors'
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const scrollContainerRef = useRef(null);
   const currentFlavor = getFlavorByIndex(currentIndex) || flavors[0];
 
+  const wrapIndex = (index) => {
+    if (flavors.length === 0) return 0;
+    return ((index % flavors.length) + flavors.length) % flavors.length;
+  }
+
   const scrollToIndex = (index) => {
-    const boundedIndex = Math.max(0, Math.min(index, flavors.length - 1));
-    setCurrentIndex(boundedIndex);
-
-    if (scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const cardWidth = container.offsetWidth;
-      container.scrollTo({ left: boundedIndex * cardWidth, behavior: 'smooth' });
-    }
-
-    return getFlavorByIndex(boundedIndex);
+    const wrappedIndex = wrapIndex(index);
+    setCurrentIndex(wrappedIndex);
+    return getFlavorByIndex(wrappedIndex);
   }
 
-  const nextSlide = () => {
-    const newIndex = Math.min(currentIndex + 1, flavors.length - 1);
-    return scrollToIndex(newIndex);
-  }
+  const nextSlide = () => scrollToIndex(currentIndex + 1);
+  const prevSlide = () => scrollToIndex(currentIndex - 1);
 
-  const prevSlide = () => {
-    const newIndex = Math.max(currentIndex - 1, 0);
-    return scrollToIndex(newIndex);
-  }
+  const nextFlavor = getFlavorByIndex(wrapIndex(currentIndex + 1)) || flavors[0];
 
   return (
     <section>
-      <div className='min-h-[calc(100vh-5.5rem)] min-w-screen bg-[linear-gradient(125deg,#111111_10%,#73191A_75%,#D52124_100%)] items-center grid grid-cols-2'>
+      <div
+        className='min-h-[calc(100vh-5.5rem)] min-w-screen items-center grid grid-cols-2 px-32'
+        style={{ background: currentFlavor.background }}
+      >
 
         {/* Infos */}
         <div>
-          <div className='flex flex-col'>
-            <img src={Apple} />
+          <div className='flex flex-col gap-4'>
+            <img src={currentFlavor.imgLogo} alt='Logo do Sabor da Monster' className='h-32 max-w-64' />
             <div>
               <h1 className='text-8xl'>{currentFlavor.name}</h1>
-              <div className='text-xl opacity-75'>
+              <div className='opacity-75 mb-8'>
                 <p>
-                  FLAVOR PROFILE :
+                  SOBRE O SABOR:
                 </p>
                 <p>
-                  {currentFlavor.description || 'Classic flavor description goes here.'}
+                  {currentFlavor.description}
                 </p>
               </div>
             </div>
-            <button className='bg-white w-44 h-16 text-black rounded-xl'>
+            <button className='bg-white w-42 h-14 text-black rounded-xl'>
               VER NA LOJA
             </button>
           </div>
 
           {/* Navigation */}
-          <nav className='flex '>
+          <nav className='flex justify-between items-end w-100'>
             {flavors.length && (
               <div className='flex items-center justify-center gap-2 mt-8'>
                 {Array.from({ length: Math.max(0, flavors.length) }).map((_, index) => (
@@ -72,11 +66,10 @@ const Hero = () => {
               </div>
             )}
 
-            <div className='flex gap-12'>
+            <div className='flex gap-1'>
               <button
                 onClick={prevSlide}
-                disabled={currentIndex === 0}
-                className='flex items-center justify-center w-16 h-16 bg-white/50 border border-white opacity-50 rounded-full cursor-pointer'
+                className='flex items-center justify-center w-16 h-16 bg-white/50 border border-white rounded-full cursor-pointer transition-opacity duration-200 hover:opacity-100'
                 aria-label='Previous flavor'
               >
                 <ChevronLeft className='w-6 h-6 text-black' />
@@ -84,8 +77,7 @@ const Hero = () => {
 
               <button
                 onClick={nextSlide}
-                disabled={currentIndex >= flavors.length - 1}
-                className='flex items-center justify-center w-16 h-16 bg-white border border-white opacity-50 rounded-full cursor-pointer'
+                className='flex items-center justify-center w-16 h-16 bg-white border border-white rounded-full cursor-pointer transition-opacity duration-200 hover:opacity-100'
                 aria-label='Next flavor'
               >
                 <ChevronRight className='w-6 h-6 text-black' />
@@ -95,27 +87,23 @@ const Hero = () => {
         </div>
 
         {/* Images */}
-        <div className='w-screen' >
+        <div className='w-screen/2 relative overflow-hidden'>
+          <div
+            className='absolute inset-0 bg-no-repeat bg-center bg-contain opacity-20 scale-118 -bottom-15 -left-5'
+            style={{backgroundImage: `url(${Monster})`}}
+          />
 
-          {/* Foreground content */}
-          <div className="relative z-10">
+          <div className="relative z-10 flex items-center gap-5 justify-end -translate-x-10 py-12">
+            <div className='flex flex-col items-center gap-4'>
+              <img src={currentFlavor.imgCan} alt={currentFlavor.name} className='max-w-50' />
+            </div>
 
-            <img src={currentFlavor.img} alt="" />
-
+            <div className='flex flex-col items-center gap-4 opacity-80'>
+              <img src={nextFlavor.imgCan} alt={nextFlavor.name} className='max-w-35' />
+            </div>
           </div>
         </div>
 
-      </div>
-
-      <div className="bg-black text-white overflow-hidden w-full" role="region" aria-label="mensagem rolante">
-        <div className="inline-block whitespace-nowrap animate-[marquee_5s_linear_infinite] will-change-transform py-3">
-          <span className="inline-block font-bold tracking-[0.12em] text-6xl px-4">Unleash The Beast! -</span>
-          <span className="inline-block font-bold tracking-[0.12em] text-6xl px-4">Unleash The Beast! -</span>
-          <span className="inline-block font-bold tracking-[0.12em] text-6xl px-4">Unleash The Beast! -</span>
-          <span className="inline-block font-bold tracking-[0.12em] text-6xl px-4">Unleash The Beast! -</span>
-          <span className="inline-block font-bold tracking-[0.12em] text-6xl px-4">Unleash The Beast! -</span>
-          <span className="inline-block font-bold tracking-[0.12em] text-6xl px-4">Unleash The Beast! -</span>
-        </div>
       </div>
     </section>
   )

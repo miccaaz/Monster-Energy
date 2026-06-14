@@ -5,17 +5,11 @@
   --font-body: "Protest Strike", sans-serif;
   --color-black-grey: #1E1E1E;
   --color-grey: #161616;
-  --color-white: #FFFFFF;
-  --color-red: #D52124;
-  --color-green: #21D521;
-  --color-blue: #21A5D5;
-  --color-pink: #73196A;
-  --color-neon: #00FF1E;
 }
 
 @layer base {
   body {
-    @apply bg-red text-white font-body text-lg overflow-x-clip;
+    @apply text-white font-body text-lg overflow-x-clip;
   }
 
   h2 {

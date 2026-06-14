@@ -2,26 +2,38 @@ export const flavors = [
   {
     id: 1,
     name: 'BAD APPLE',
-    img: '../../assets/cans/bad-apple.png',
-    description: 'Sabor clássico de maçã Fuji, é crocante, seca e não muito doce'
+    imgCan: '/images/cans/bad-apple.png',
+    imgLogo: '/images/logos/bad-apple-logo.png',
+    description: 'Sabor clássico de maçã Fuji, é crocante, seca e não muito doce',
+    background: 'linear-gradient(125deg, #111111 10%, #73191A 73%, #D52124 100%)'
+
   },
   {
     id: 2,
     name: 'RIO PUNCH',
-    img: '../../assets/cans/rio-punch.png',
-    description: 'Creme de Papaya tropical com um toque de especiarias'
+    imgCan: '/images/cans/rio-punch.png',
+    imgLogo: '/images/logos/rio-punch-logo.png',
+    description: 'Creme de Papaya tropical com um toque de especiarias',
+    background: 'linear-gradient(125deg, #111111 10%, #19731C 73%, #21D521 100%)'
+
   },
   {
     id: 3,
     name: 'MANGO LOCO',
-    img: '../../assets/cans/mango-loco.png',
-    description: 'Suco de manga e mix de frutas cítricas naturais'
+    imgCan: '/images/cans/mango-loco.png',
+    imgLogo: '/images/logos/mango-loco-logo.png',
+    description: 'Suco de manga e mix de frutas cítricas naturais',
+    background: 'linear-gradient(125deg, #111111 10%, #196A73 73%, #21A5D5 100%)'
+
   },
   {
     id: 4,
     name: 'VIKING BERRY',
-    img: '../../assets/cans/viking-berry.png',
-    description: "Sabores de frutos silvestres com um toque único"
+    imgCan: '/images/cans/viking-berry.png',
+    imgLogo: '/images/logos/viking-berry-logo.png',
+    description: "Sabores de frutos silvestres com um toque único",
+    background: 'linear-gradient(125deg, #111111 10%, #73196A 73%, #218AD5 100%)'
+
   }
 ]
 
