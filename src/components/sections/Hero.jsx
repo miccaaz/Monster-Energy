@@ -87,13 +87,13 @@ const Hero = () => {
         </div>
 
         {/* Images */}
-        <div className='w-screen/2 relative overflow-hidden'>
+        <div className='min-w-screen/2 min-h-[calc(100vh-5.5rem)] relative overflow-hidden flex items-center justify-end'>
           <div
-            className='absolute inset-0 bg-no-repeat bg-center bg-contain opacity-20 scale-118 -bottom-15 -left-5'
+            className='absolute inset-0 bg-no-repeat bg-center bg-contain opacity-20 scale-120 -bottom-15 -left-5'
             style={{backgroundImage: `url(${Monster})`}}
           />
 
-          <div className="relative z-10 flex items-center gap-5 justify-end -translate-x-10 py-12">
+          <div className="relative z-10 flex items-center gap-5 py-12 -translate-x-30">
             <div className='flex flex-col items-center gap-4'>
               <img src={currentFlavor.imgCan} alt={currentFlavor.name} className='max-w-50' />
             </div>
