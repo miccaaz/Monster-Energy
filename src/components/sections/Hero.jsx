@@ -2,48 +2,57 @@ import React, { useState, useRef } from 'react'
 import Monster from '../../assets/monster.png'
 import Apple from '../../assets/images/logos/bad-apple-logo.png'
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { flavors } from '../../data/flavors'
+import { flavors, getFlavorByIndex } from '../../data/flavors'
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef(null);
+  const currentFlavor = getFlavorByIndex(currentIndex) || flavors[0];
 
   const scrollToIndex = (index) => {
-    setCurrentIndex(index);
+    const boundedIndex = Math.max(0, Math.min(index, flavors.length - 1));
+    setCurrentIndex(boundedIndex);
+
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current;
       const cardWidth = container.offsetWidth;
-      container.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+      container.scrollTo({ left: boundedIndex * cardWidth, behavior: 'smooth' });
     }
+
+    return getFlavorByIndex(boundedIndex);
   }
+
   const nextSlide = () => {
-    const maxIndex = Math.max(0, flavors.length);
-    const newIndex = Math.min(currentIndex + 1, maxIndex);
-    scrollToIndex(newIndex);
+    const newIndex = Math.min(currentIndex + 1, flavors.length - 1);
+    return scrollToIndex(newIndex);
   }
 
   const prevSlide = () => {
     const newIndex = Math.max(currentIndex - 1, 0);
-    scrollToIndex(newIndex);
+    return scrollToIndex(newIndex);
   }
 
   return (
     <section>
-      <div className='min-h-[calc(100vh-5.5rem)] min-w-screen bg-[linear-gradient(125deg,#111111_10%,#73191A_75%,#D52124_100%)] flex items-center'>
-        
+      <div className='min-h-[calc(100vh-5.5rem)] min-w-screen bg-[linear-gradient(125deg,#111111_10%,#73191A_75%,#D52124_100%)] items-center grid grid-cols-2'>
+
+        {/* Infos */}
         <div>
-          {/* Infos */}
           <div className='flex flex-col'>
             <img src={Apple} />
             <div>
-              <h1>BAD APPLE</h1>
-              <p>
-                FLAVOR PROFILE :
-                Classic fuji apple flavor that's crisp, dry and not too sweet
-              </p>
+              <h1 className='text-8xl'>{currentFlavor.name}</h1>
+              <div className='text-xl opacity-75'>
+                <p>
+                  FLAVOR PROFILE :
+                </p>
+                <p>
+                  {currentFlavor.description || 'Classic flavor description goes here.'}
+                </p>
+              </div>
             </div>
             <button className='bg-white w-44 h-16 text-black rounded-xl'>
-                VER NA LOJA
+              VER NA LOJA
             </button>
           </div>
 
@@ -84,6 +93,18 @@ const Hero = () => {
             </div>
           </nav>
         </div>
+
+        {/* Images */}
+        <div className='w-screen' >
+
+          {/* Foreground content */}
+          <div className="relative z-10">
+
+            <img src={currentFlavor.img} alt="" />
+
+          </div>
+        </div>
+
       </div>
 
       <div className="bg-black text-white overflow-hidden w-full" role="region" aria-label="mensagem rolante">
