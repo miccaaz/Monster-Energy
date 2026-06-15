@@ -1,27 +1,101 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import gsap from 'gsap';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Monster from '../../assets/monster.png'
 import { flavors, getFlavorByIndex } from '../../data/flavors'
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const currentFlavor = getFlavorByIndex(currentIndex) || flavors[0];
+  const [displayCurrentIndex, setDisplayCurrentIndex] = useState(0);
+  const [displayTargetIndex, setDisplayTargetIndex] = useState(1);
+  const [isAutoPlay, setIsAutoPlay] = useState(true);
+  const [isButtonLocked, setIsButtonLocked] = useState(false);
+
+  const currentCanRef = useRef(null);
+  const nextCanRef = useRef(null);
+  
+  const currentFlavor = getFlavorByIndex(displayCurrentIndex) || flavors[0];
 
   const wrapIndex = (index) => {
     if (flavors.length === 0) return 0;
     return ((index % flavors.length) + flavors.length) % flavors.length;
   }
 
-  const scrollToIndex = (index) => {
+  const animateCanChange = (direction, callback) => {
+    const tl = gsap.timeline({
+      onComplete: callback
+    });
+
+    if (direction === 'next') {
+      tl.to(nextCanRef.current, {
+        x: -220,
+        scale: 1.33,
+        opacity: 1,
+        duration: 0.3,
+        ease: 'back.inOut'
+      }, 0);
+
+      tl.to(currentCanRef.current, {
+        opacity: 0,
+        duration: 0.2
+      }, 0);
+
+    } else {
+      tl.to(currentCanRef.current, {
+        x: 220,
+        scale: 0.75,
+        opacity: 0.8,
+        duration: 0.3,
+        ease: 'back.inOut'
+      }, 0);
+
+      tl.to(nextCanRef.current, {
+        opacity: 0,
+        duration: 0.2
+      }, 0);
+
+    }
+  };
+
+  const scrollToIndex = (index, direction = 'next') => {
+    if (isButtonLocked) return;
+    setIsButtonLocked(true);
+
     const wrappedIndex = wrapIndex(index);
-    setCurrentIndex(wrappedIndex);
+    setDisplayTargetIndex(wrappedIndex);
+
+    animateCanChange(direction, () => {
+      gsap.set([currentCanRef.current, nextCanRef.current], {
+        x: 0,
+        scale: 1,
+        opacity: 1,
+        clearProps: 'all'
+      });
+
+      setCurrentIndex(wrappedIndex);
+      setDisplayCurrentIndex(wrappedIndex);
+      setDisplayTargetIndex(wrapIndex(wrappedIndex + 1));
+      setTimeout(() => setIsButtonLocked(false), 500);
+    });
+
     return getFlavorByIndex(wrappedIndex);
   }
 
-  const nextSlide = () => scrollToIndex(currentIndex + 1);
-  const prevSlide = () => scrollToIndex(currentIndex - 1);
+  const nextSlide = () => scrollToIndex(currentIndex + 1, 'next');
+  const prevSlide = () => scrollToIndex(currentIndex - 1, 'prev');
 
-  const nextFlavor = getFlavorByIndex(wrapIndex(currentIndex + 1)) || flavors[0];
+  // Auto-play a cada 2 segundos
+  useEffect(() => {
+    if (!isAutoPlay) return;
+
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [currentIndex, isAutoPlay]);
+
+  const nextFlavor = getFlavorByIndex(displayTargetIndex) || flavors[0];
 
   return (
     <section>
@@ -58,6 +132,7 @@ const Hero = () => {
                   <button
                     key={index}
                     onClick={() => scrollToIndex(index)}
+                    disabled={isButtonLocked}
                     className={`transition-all duration-300 rounded-full ${index === currentIndex
                       ? 'bg-white w-8 h-4' : 'bg-white/30 w-4 h-4 hover:bg-white/50'}`}
                     aria-label={`Go to slide ${index + 1}`}
@@ -69,7 +144,8 @@ const Hero = () => {
             <div className='flex gap-1'>
               <button
                 onClick={prevSlide}
-                className='flex items-center justify-center w-16 h-16 bg-white/50 border border-white rounded-full cursor-pointer transition-opacity duration-200 hover:opacity-100'
+                disabled={isButtonLocked}
+                className={'flex items-center justify-center w-16 h-16 bg-white/50 border border-white rounded-full transition-opacity duration-200 hover:opacity-100 cursor-pointer'}
                 aria-label='Previous flavor'
               >
                 <ChevronLeft className='w-6 h-6 text-black' />
@@ -77,7 +153,8 @@ const Hero = () => {
 
               <button
                 onClick={nextSlide}
-                className='flex items-center justify-center w-16 h-16 bg-white border border-white rounded-full cursor-pointer transition-opacity duration-200 hover:opacity-100'
+                disabled={isButtonLocked}
+                className={'flex items-center justify-center w-16 h-16 bg-white border border-white rounded-full transition-opacity duration-200 hover:opacity-100 cursor-pointer'}
                 aria-label='Next flavor'
               >
                 <ChevronRight className='w-6 h-6 text-black' />
@@ -93,13 +170,21 @@ const Hero = () => {
             style={{backgroundImage: `url(${Monster})`}}
           />
 
-          <div className="relative z-10 flex items-center gap-5 py-12 -translate-x-30">
-            <div className='flex flex-col items-center gap-4'>
+          <div className="relative z-10 flex items-center gap-5 py-12">
+            <div
+              ref={currentCanRef}
+              className='flex flex-col items-center gap-4'
+              style={{ opacity: 1 }}
+            >
               <img src={currentFlavor.imgCan} alt={currentFlavor.name} className='max-w-50' />
             </div>
 
-            <div className='flex flex-col items-center gap-4 opacity-80'>
-              <img src={nextFlavor.imgCan} alt={nextFlavor.name} className='max-w-35' />
+            <div
+              ref={nextCanRef}
+              className='flex flex-col items-center gap-4'
+              style={{ opacity: 0.8 }}
+            >
+              <img src={nextFlavor.imgCan} alt={nextFlavor.name} className='max-w-50 scale-75' />
             </div>
           </div>
         </div>

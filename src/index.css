@@ -9,7 +9,7 @@
 
 @layer base {
   body {
-    @apply text-white font-body text-lg overflow-x-clip;
+    @apply bg-black text-white font-body overflow-x-clip;
   }
 
   h2 {
