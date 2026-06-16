@@ -13,7 +13,8 @@ const Hero = () => {
 
   const currentCanRef = useRef(null);
   const nextCanRef = useRef(null);
-  
+  const currentIndexRef = useRef(0);
+
   const currentFlavor = getFlavorByIndex(displayCurrentIndex) || flavors[0];
 
   const wrapIndex = (index) => {
@@ -31,13 +32,13 @@ const Hero = () => {
         x: -220,
         scale: 1.33,
         opacity: 1,
-        duration: 0.3,
-        ease: 'back.inOut'
+        duration: 0.4,
+        ease: 'back.in'
       }, 0);
 
       tl.to(currentCanRef.current, {
         opacity: 0,
-        duration: 0.2
+        duration: 0.3
       }, 0);
 
     } else {
@@ -45,13 +46,13 @@ const Hero = () => {
         x: 220,
         scale: 0.75,
         opacity: 0.8,
-        duration: 0.3,
-        ease: 'back.inOut'
+        duration: 0.4,
+        ease: 'back.in'
       }, 0);
 
       tl.to(nextCanRef.current, {
         opacity: 0,
-        duration: 0.2
+        duration: 0.3
       }, 0);
 
     }
@@ -85,24 +86,29 @@ const Hero = () => {
   const prevSlide = () => scrollToIndex(currentIndex - 1, 'prev');
 
   useEffect(() => {
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
+
+  useEffect(() => {
     if (!isAutoPlay) return;
 
     const interval = setInterval(() => {
-      nextSlide();
-    }, 4000);
+      scrollToIndex(currentIndexRef.current + 1, 'next');
+    }, 5000);
 
     return () => clearInterval(interval);
-  }, [currentIndex, isAutoPlay]);
+  }, [isAutoPlay]);
 
   const nextFlavor = getFlavorByIndex(displayTargetIndex) || flavors[0];
 
   return (
     <section
       className='min-h-[calc(100vh-5.5rem)] min-w-screen items-center grid grid-cols-2 px-32'
-        style={{ background: currentFlavor.background }}
+      style={{ background: currentFlavor.background }}
     >
       {/* Infos */}
       <div>
+        {/* Main Infos */}
         <div className='flex flex-col gap-4'>
           <img src={currentFlavor.imgLogo} alt='Logo do Sabor da Monster' className='h-32 max-w-64' />
           <div>
@@ -164,7 +170,7 @@ const Hero = () => {
       <div className='min-w-screen/2 min-h-[calc(100vh-5.5rem)] relative overflow-hidden flex items-center justify-end'>
         <div
           className='absolute inset-0 bg-no-repeat bg-center bg-contain opacity-20 scale-120 -bottom-15 -left-5'
-          style={{backgroundImage: `url(${Monster})`}}
+          style={{ backgroundImage: `url(${Monster})` }}
         />
 
         <div className="relative z-10 flex items-center gap-5 py-12">
