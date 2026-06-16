@@ -3,30 +3,35 @@ export const categories = [
     id: 1,
     name: 'MONSTER ENERGY',
     category: 'ORIGINAL',
-    imgCan: '/images/can/original.png'
+    color: '#00FF1E',
+    imgCan: '/images/cans/original.png'
   },
   {
     id: 2,
     name: 'MONSTER ULTRA',
     category: 'ZERO SUGAR',
-    imgCan: '/images/can/zero-ultra.png'
+    color: '#B0B0B0',
+    imgCan: '/images/cans/zero-ultra.png'
   },
   {
     id: 3,
     name: 'MONSTER COFFEE',
     category: 'COFFEE + ENERGY',
-    imgCan: '/images/can/java.png'
+    color: '#CFA671',
+    imgCan: '/images/cans/java.png'
   },
   {
     id: 4,
     name: 'JUICE MONSTER',
     category: 'JUICE + ENERGY',
-    imgCan: '/images/can/bad-apple.png'
+    color: '#FF4747',
+    imgCan: '/images/cans/bad-apple.png'
   },
   {
     id: 5,
     name: 'FAN FAVORITES',
     category: 'TOP FLAVORS',
-    imgCan: '/images/can/rio-punch.png'
+    color: '#00FF1E',
+    imgCan: '/images/cans/rio-punch.png'
   }
 ]
