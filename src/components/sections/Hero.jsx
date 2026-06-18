@@ -103,7 +103,7 @@ const Hero = () => {
 
   return (
     <section
-      className='min-h-[calc(100vh-5.5rem)] min-w-screen items-center grid grid-cols-2 px-32'
+      className='h-[calc(100vh-5.5rem)] w-screen items-center grid grid-cols-2 px-32'
       style={{ background: currentFlavor.background }}
     >
       {/* Infos */}
@@ -167,7 +167,7 @@ const Hero = () => {
       </div>
 
       {/* Images */}
-      <div className='min-w-screen/2 min-h-[calc(100vh-5.5rem)] relative overflow-hidden flex items-center justify-end'>
+      <div className='w-screen/2 h-[calc(100vh-5.5rem)] relative overflow-hidden flex items-center justify-end'>
         <div
           className='absolute inset-0 bg-no-repeat bg-center bg-contain opacity-20 scale-120 -bottom-15 -left-5'
           style={{ backgroundImage: `url(${Monster})` }}
